@@ -16,7 +16,7 @@ def login():
             form.username.data))
         return redirect(url_for('main'))
     return render_template('login.html', judul='Login', form=form)
-@app.route('/register',methods=['Get','POST'])
+@app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -25,6 +25,6 @@ def register():
         return redirect(url_for('main'))
 
     return render_template('register.html', judul='Register', form=form)
-@app.route('/search')
+@app.route('/search', methods=['GET','POST'])
 def search():
     return render_template('search.html',judul='Search')
