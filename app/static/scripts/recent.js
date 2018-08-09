@@ -1,6 +1,5 @@
 $.post("/recent",function(res){
   for(var i = 0;i < res['namaBarang'].length;i++){
-    console.log(res);
     $('.isiRecent').append(`<div class="row">
       <div class="col-md-12">
         <h4>`+res['namaBarang'][i]+`</h4>
