@@ -7,10 +7,10 @@ from sqlalchemy import desc
 @app.route('/')
 def index():
     return render_template('main.html',judul = 'Main')
-@app.route('/main')
+@app.route('/main', methods=['GET','POST'])
 def main():
     return render_template('main.html',judul = 'Main')
-@app.route('/recent')
+@app.route('/recent', methods=['GET','POST'])
 def recent():
     #cari 5 item terakhir
     latest = Inventori.query.order_by(desc(Inventori.id)).limit(5).all()
@@ -24,8 +24,8 @@ def recent():
         namaHimp.append(User.query.get(barang.idHimpunan).displayname)
     recentJson = jsonify({'namaBarang' : namaBarang, 'jumlah' : jumlah, 'harga' : harga, 'namaHimp' : namaHimp})
     #return recentJson ke front end untuk diolah
-    return recentJson
-@app.route('/search', methods=['POST'])
+    return recentJson,200
+@app.route('/search', methods=['GET','POST'])
 def search():
     data = request.data
     tipe = data['tipe']
@@ -58,7 +58,7 @@ def search():
     else:
         #tipe tidak valid, return error
         pass
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
     data = request.data
     username = data['username']
@@ -77,7 +77,7 @@ def login():
             #return pass salah
             pass
     return 200
-@app.route('/register',methods=['POST'])
+@app.route('/register',methods=['GET','POST'])
 def register():
     data = request.data
     username = data['username']
