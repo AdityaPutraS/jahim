@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block isi %}
+  <div class="container">
+    {% if akun %}
+    <div class="row">
+      <div class="col-md-12">
+        <h4 style="float:right!important">HMIF</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p style="float:right!important">online</p>
+      </div>
+    </div>
+    <hr>
+    {% endif %}
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Recently Added</h3>
+      </div>
+    </div>
+    <hr>
+    <div class="isiRecent"></div>
+    <hr>
+  </div>
+  <script src="static/scripts/recent.js"></script>
+{% endblock %}

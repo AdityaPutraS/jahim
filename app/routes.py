@@ -6,10 +6,13 @@ from sqlalchemy import desc
 
 @app.route('/')
 def index():
-    return render_template('main.html',judul = 'Main')
-@app.route('/main', methods=['GET','POST'])
-def main():
-    return render_template('main.html',judul = 'Main')
+    return render_template('home.html')
+@app.route('/home', methods=['GET','POST'])
+def home():
+    return render_template('home.html')
+@app.route('/daftarBarang')
+def daftarBarang():
+    pass
 @app.route('/recent', methods=['GET','POST'])
 def recent():
     #cari 5 item terakhir
