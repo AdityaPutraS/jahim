@@ -7,6 +7,7 @@ class User(db.Model):
     password = db.Column(db.String(128))
     barang = db.relationship('Inventori', backref='pemilik',cascade='all,delete', lazy=True)
     pinjam = db.relationship('Pinjam',backref='peminjam',cascade='all,delete',lazy=True)
+
     def __repr__(self):
         return '<User : {}>'.format(self.displayName)
 
