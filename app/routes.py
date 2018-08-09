@@ -11,7 +11,7 @@ def index():
 def home():
     return render_template('home.html')
 @app.route('/profile/<namaHimp>',methods=['GET','POST'])
-def profile():
+def profile(namaHimp):
     akunHimpunan = User.query.filter_by(displayName=namaHimp).first()
     if(akunHimpunan is None):
         #return tidak ketemu
@@ -19,8 +19,8 @@ def profile():
     else:
         #ketemu
         listBarang,listPinjam = [],[]
-        akunBarang = akunHimpunan.barang
-        akunPinjam = akunHimpunan.pinjam
+        akunBarang = Inventori.query.filter_by(namaHimpunan=namaHimp).first()
+        akunPinjam = Pinjam.query.filter_by(namaPeminjam=namaHimp).first()
         #cek apakah dia punya barang untuk dipinjam
         if(akunBarang is None):
             pass #skip
@@ -39,9 +39,25 @@ def profile():
                 listPinjam.append(data)
         dataProfile = {'namaHimpunan':namaHimp,'listBarang':listBarang ,'listPinjam':listPinjam}
         return jsonify(dataProfile)
-@app.route('/daftarBarang')
+@app.route('/daftarBarang', methods=['POST'])
 def daftarBarang():
-    pass
+    #mendaftarkan barang pemilik
+    data = request.json
+    if(data is None):
+        return Response(status=123)
+    else:
+        namaHimp = data['namaHimpunan']
+        namaBarang = data['namaBarang']
+        jumlah = data['jumlah']
+        akunHimp = User.query.filter_by(displayName=namaHimp).first()
+        if(akunHimp is None):
+            return Response(status=404)
+            #error, ga ketemu
+        else:
+            barangBaru = Inventori(namaBarang=namaBarang,jumlahBarang=jumlah,pemilik=akunHimp)
+            db.session.add(barangBaru)
+            db.session.commit()
+            return Response(status=200)
 @app.route('/recent', methods=['GET','POST'])
 def recent():
     #cari 5 item terakhir
@@ -56,9 +72,9 @@ def recent():
     recentJson = jsonify({'namaBarang' : namaBarang, 'jumlah' : jumlah, 'namaHimp' : namaHimp})
     #return recentJson ke front end untuk diolah
     return recentJson,200
-@app.route('/search', methods=['GET','POST'])
+@app.route('/search', methods=['POST'])
 def search():
-    data = request.data
+    data = request.get_json()
     tipe = data['tipe']
     if(tipe=='Barang'):
         #cari Barang
