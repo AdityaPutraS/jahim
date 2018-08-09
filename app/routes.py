@@ -22,9 +22,9 @@ def recent():
         jumlah.append(barang.jumlahbarang)
         harga.append(barang.harga)
         namaHimp.append(User.query.get(barang.idHimpunan).displayname)
-    recentJson = {'namaBarang' : namaBarang, 'jumlah' : jumlah, 'harga' : harga, 'namaHimp' : namaHimp}
+    recentJson = jsonify({'namaBarang' : namaBarang, 'jumlah' : jumlah, 'harga' : harga, 'namaHimp' : namaHimp})
     #return recentJson ke front end untuk diolah
-    pass
+    return recentJson
 @app.route('/search', methods=['POST'])
 def search():
     data = request.data
