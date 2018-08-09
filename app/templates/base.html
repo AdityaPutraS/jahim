@@ -26,8 +26,12 @@
               <li><a href="{{ url_for('home') }}">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+              {% if akun %}
+              <li><a href="{{ url_for('profile') }}">Login</a></li>
+              {% else %}
               <li><a href="{{ url_for('register') }}">Register</a></li>
               <li><a href="{{ url_for('login') }}">Login</a></li>
+              {% endif %}
             </ul>
             <form class="navbar-form navbar-right">
               <div class="form-group">

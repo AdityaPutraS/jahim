@@ -10,6 +10,9 @@ def index():
 @app.route('/home', methods=['GET','POST'])
 def home():
     return render_template('home.html')
+@app.route('/profile',methods=['GET','POST'])
+def profile():
+    pass
 @app.route('/daftarBarang')
 def daftarBarang():
     pass
@@ -24,7 +27,7 @@ def recent():
         namaBarang.append(barang.namabarang)
         jumlah.append(barang.jumlahbarang)
         harga.append(barang.harga)
-        namaHimp.append(User.query.get(barang.idHimpunan).displayname)
+        namaHimp.append(barang.namaHimpunan)
     recentJson = jsonify({'namaBarang' : namaBarang, 'jumlah' : jumlah, 'harga' : harga, 'namaHimp' : namaHimp})
     #return recentJson ke front end untuk diolah
     return recentJson,200
