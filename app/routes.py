@@ -6,10 +6,16 @@ from sqlalchemy import desc
 
 @app.route('/')
 def index():
-    return render_template('main.html',judul = 'Main')
-@app.route('/main', methods=['GET','POST'])
-def main():
-    return render_template('main.html',judul = 'Main')
+    return render_template('home.html')
+@app.route('/home', methods=['GET','POST'])
+def home():
+    return render_template('home.html')
+@app.route('/profile',methods=['GET','POST'])
+def profile():
+    pass
+@app.route('/daftarBarang')
+def daftarBarang():
+    pass
 @app.route('/recent', methods=['GET','POST'])
 def recent():
     #cari 5 item terakhir
@@ -21,7 +27,7 @@ def recent():
         namaBarang.append(barang.namabarang)
         jumlah.append(barang.jumlahbarang)
         harga.append(barang.harga)
-        namaHimp.append(User.query.get(barang.idHimpunan).displayname)
+        namaHimp.append(barang.namaHimpunan)
     recentJson = jsonify({'namaBarang' : namaBarang, 'jumlah' : jumlah, 'harga' : harga, 'namaHimp' : namaHimp})
     #return recentJson ke front end untuk diolah
     return recentJson,200

@@ -5,7 +5,7 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     displayname = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    barang = db.relationship('Inventori', backref='author', lazy='dynamic')
+    barang = db.relationship('Inventori', backref='pemilik',cascade='all,delete', lazy=True)
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -14,7 +14,7 @@ class Inventori(db.Model):
     namabarang = db.Column(db.String(120), index=True, unique=True)
     jumlahbarang = db.Column(db.Integer, index=True)
     harga = db.Column(db.Integer, index=True)
-    idHimpunan = db.Column(db.Integer, db.ForeignKey('user.id'))
+    namaHimpunan = db.Column(db.String(120), db.ForeignKey('user.displayname'))
 
     def __repr__(self):
         return 'Nama {}>'.format(self.namabarang)
