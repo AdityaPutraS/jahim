@@ -9,7 +9,11 @@ def index():
     return render_template('home.html')
 @app.route('/home', methods=['GET','POST'])
 def home():
-    return render_template('home.html')
+    data = request.json
+    if(data is None):
+        return render_template('home.html')
+    else:
+        return render_template('home.html',akun=data['currentAkun'])
 @app.route('/profile/<namaHimp>',methods=['GET','POST'])
 def profile(namaHimp):
     akunHimpunan = User.query.filter_by(displayName=namaHimp).first()
@@ -74,7 +78,7 @@ def recent():
     return recentJson,200
 @app.route('/search', methods=['POST'])
 def search():
-    data = request.get_json()
+    data = request.json
     tipe = data['tipe']
     if(tipe=='Barang'):
         #cari Barang
@@ -82,29 +86,23 @@ def search():
         cekBarang = Inventori.query.filter_by(namaBarang=namaBarang).first()
         if(cekBarang is None):
             #barang tidak ditemukan
-            pass
+            return Response(status=404)
         else:
             #barang ketemu, return sama data himpunannya juga
-            akunHimpunan = User.query.filter_by(cekBarang.namaHimpunan).first()
+            akunHimpunan = User.query.filter_by(displayName=cekBarang.namaHimpunan).first()
             namaHimpunan = akunHimpunan.displayName
             jumlah = cekBarang.jumlahBarang
             pass
     elif(tipe=='Username'):
         #cari user
         namaHimpunan = data['cari']
-        akunHimpunan = User.query.filter_by(displayName=namaHimpunan)
-        if(akunHimpunan is None):
-            #akun tidak ditemukan
-            pass
-        else:
-            #ketemu
-            pass
+        return profile(namaHimpunan)
     else:
         #tipe tidak valid, return error
-        pass
+        return Response(status=500)
 @app.route('/login', methods=['GET','POST'])
 def login():
-    data = request.data
+    data = request.json
     username = data['username']
     password = data['password']
     #cari di db
@@ -114,21 +112,21 @@ def login():
         pass
     else:
         #cek apakah password bener
-        if(akun.password):
+        if(password == akun.password):
             #sukses, return sukses
-            pass
+            return jsonify({'currentAkun':akun.displayName}),200
         else:
             #return pass salah
-            pass
+            return Respones(status=120)
     return 200
 @app.route('/register',methods=['GET','POST'])
 def register():
-    data = request.data
+    data = request.json
     username = data['username']
     displayname = data['displayname']
     password = data['password']
     #cari di db apakah usernamenya sudah ada
-    cekUsername = User.query.filter_by(username=username).first()
+    cekAkun = User.query.filter_by(username=username).first()
     cekDisplay = User.query.filter_by(displayName=displayname).first()
     if(cekAkun is None):
         #cek apakah displayname sudah dipakai
